@@ -1,74 +1,62 @@
 <template>
+<div>
+  <v-btn color="deep-purple" dark @click.stop="dialog = true">
+    Ver Carrito<v-icon>mdi-cart-outline</v-icon>
+  </v-btn>
   <v-row justify="center">
-    <v-btn color="deep-purple" dark @click.stop="dialog = true">
-     Ver Carrito<v-icon>mdi-cart-outline</v-icon>
-    </v-btn>
-
     <v-dialog v-model="dialog" max-width="290">
       <v-card>
-        <v-card
-    class="mx-auto"
-    max-width="500"
-  >
-    <v-toolbar
-      color="deep-purple"
-      dark
-    >
+        <v-card class="mx-auto" max-width="500">
+          <v-toolbar color="deep-purple" dark>
+            <v-toolbar-title>Carrito</v-toolbar-title>
 
-      <v-toolbar-title>Carrito</v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
 
-      <v-spacer></v-spacer>
+          <v-list two-line>
+            <v-list-item-group
+              v-model="selected"
+              active-class="pink--text"
+              multiple
+            >
+              <template v-for="(item, index) in items">
+                <v-list-item :key="item.name">
+                  <template v-slot:default="{ active }">
+                    <v-list-item-content>
+                      <v-list-item-title v-text="item.name"></v-list-item-title>
 
-    </v-toolbar>
+                      <v-list-item-subtitle
+                        class="text--primary"
+                        v-text="item.precio"
+                      ></v-list-item-subtitle>
 
-    <v-list two-line>
-      <v-list-item-group
-        v-model="selected"
-        active-class="pink--text"
-        multiple
-      >
-        <template v-for="(item, index) in items">
-          <v-list-item :key="item.name">
-            <template v-slot:default="{ active }">
-              <v-list-item-content>
-                <v-list-item-title v-text="item.name"></v-list-item-title>
+                      <v-list-item-subtitle
+                        v-text="item.descripcion"
+                      ></v-list-item-subtitle>
+                    </v-list-item-content>
 
-                <v-list-item-subtitle
-                  class="text--primary"
-                  v-text="item.precio"
-                ></v-list-item-subtitle>
+                    <v-list-item-action>
+                      <v-list-item-action-text
+                        v-text="item.action"
+                      ></v-list-item-action-text>
 
-                <v-list-item-subtitle v-text="item.descripcion"></v-list-item-subtitle>
-              </v-list-item-content>
+                      <v-icon v-if="!active" color="grey lighten-1">
+                        mdi-star-outline
+                      </v-icon>
 
-              <v-list-item-action>
-                <v-list-item-action-text v-text="item.action"></v-list-item-action-text>
+                      <v-icon v-else color="yellow darken-3"> mdi-star </v-icon>
+                    </v-list-item-action>
+                  </template>
+                </v-list-item>
 
-                <v-icon
-                  v-if="!active"
-                  color="grey lighten-1"
-                >
-                  mdi-star-outline
-                </v-icon>
-
-                <v-icon
-                  v-else
-                  color="yellow darken-3"
-                >
-                  mdi-star
-                </v-icon>
-              </v-list-item-action>
-            </template>
-          </v-list-item>
-
-          <v-divider
-            v-if="index < items.length - 1"
-            :key="index"
-          ></v-divider>
-        </template>
-      </v-list-item-group>
-    </v-list>
-  </v-card>
+                <v-divider
+                  v-if="index < items.length - 1"
+                  :key="index"
+                ></v-divider>
+              </template>
+            </v-list-item-group>
+          </v-list>
+        </v-card>
 
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -107,6 +95,7 @@
       </v-card>
     </v-col>
   </v-row>
+  </div>
 </template>
 
 <script>
@@ -115,10 +104,9 @@ export default {
   data() {
     return {
       dialog: false,
-      
+
       selected: [2],
-      items: [
-      ],
+      items: [],
     };
   },
   props: ["desserts"],
@@ -126,8 +114,8 @@ export default {
   methods: {
     mostrar(id) {
       console.log("Selecionado", id);
-      this.items.push(id)
-      console.log("data",this.items)
+      this.items.push(id);
+      console.log("data", this.items);
     },
   },
 };
