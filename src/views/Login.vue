@@ -33,7 +33,13 @@
             </v-col>
           </v-row>
           <div class="text-center mt-10 mb-5">
-            <v-btn class="mr-5" depressed color="primary" large @click="ingresar">
+            <v-btn
+              class="mr-5"
+              depressed
+              color="primary"
+              large
+              @click="ingresar"
+            >
               Ingresar
             </v-btn>
             <v-btn depressed color="primary" large @click="crear">
@@ -71,6 +77,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+export const RUTA_SERVIDOR = process.env.VUE_APP_RUTA_API;
 
 export default {
   data() {
@@ -87,12 +95,47 @@ export default {
     };
   },
   methods: {
-    ingresar(){
-        this.$router.push("/Home");
-    },  
+    ingresar() {
+      console.log("estas ingresando");
+      
+      axios
+        .post(RUTA_SERVIDOR + "/api/token/", {
+          username: "Fulcrum",
+          password: "123456",
+        })
+        .then((response) => {
+          this.auth = "Bearer " + response.data.access;
+          axios
+            .get(
+              RUTA_SERVIDOR +
+                "/usuario/?search="+ this.usuario,
+              {
+                headers: { Authorization: this.auth },
+              }
+            )
+            .then((res) => {
+              console.log(res.data)
+              if(res.data[0].contra==this.contra){
+                this.$router.push("/Home");
+              }else{
+                alert("usuario o contraseña no son correctos")
+              }
+              
+            })
+            .catch((res) => {
+              console.warn("Error:", res);
+              this.dialog = false;
+            });
+        })
+        .catch((response) => {
+          response === 404
+            ? console.warn("lo sientimos no tenemos servicios")
+            : console.warn("Error:", response);
+        });
+    },
 
-    crear(){
-        this.$router.push("/Create");
+    crear() {
+      this.$router.push("/Create");
     },
 
     actualizar() {

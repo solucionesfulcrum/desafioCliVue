@@ -107,6 +107,9 @@
 </template>
 
 <script>
+import axios from 'axios'
+export const RUTA_SERVIDOR = process.env.VUE_APP_RUTA_API;
+
 export default {
   data() {
     return {
@@ -117,12 +120,7 @@ export default {
       contra: "",
       repeContra: "",
       mensaje: "",
-      desserts: [
-        {
-          telefono: "Prueba",
-          usuario: "prueba",
-        },
-      ],
+      desserts: [],
       value: false,
       nameRules: [
         (v) => !!v || "*Campo obligatorio",
@@ -140,9 +138,40 @@ export default {
         this.repeContra != ""
       ) {
         if (this.contra == this.repeContra) {
-          this.desserts.push({'telefono':this.telefono,'usuario':this.usuario})
-          console.log(this.desserts);
-          //this.$router.push("/Home");
+         axios
+        .post(RUTA_SERVIDOR + "/api/token/", {
+          username: "Fulcrum",
+          password: "123456",
+        })
+        .then((response) => {
+          this.auth = "Bearer " + response.data.access;
+          axios
+            .post(
+              RUTA_SERVIDOR + "/usuario/",
+              {
+                usuario : this.usuario,
+                contra: this.contra,
+                telefono : this.telefono
+              },
+              {
+                headers: { Authorization: this.auth },
+              }
+            )
+            .then((res) => {
+              console.log("exito", res.status);
+              this.$router.push("/");
+            })
+            .catch((res) => {
+              console.log("Error:", res);
+              this.dialog = false;
+            });
+        })
+        .catch((response) => {
+          response === 404
+            ? console.warn("lo sientimos no tenemos servicios")
+            : console.warn("Error:", response);
+        });
+        
         } else {
           (this.value = true), (this.mensaje = "Las contraseñas no coinciden");
         }
