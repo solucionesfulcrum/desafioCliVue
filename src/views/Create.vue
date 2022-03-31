@@ -59,6 +59,9 @@
             <v-btn depressed color="primary" large @click="crear">
               Crear
             </v-btn>
+            <v-btn  class="ml-4" depressed color="primary" large @click="obtenerUsuarios">
+              Listar Usuario
+            </v-btn>
             <v-dialog v-model="dialog" hide-overlay persistent width="300">
               <v-card color="primary" dark>
                 <v-card-text>
@@ -96,7 +99,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in desserts" :key="item.name">
+          <tr v-for="item in usuarioState" :key="item.telefono">
             <td>{{ item.telefono }}</td>
             <td>{{ item.usuario }}</td>
           </tr>
@@ -109,7 +112,7 @@
 <script>
 import axios from 'axios'
 export const RUTA_SERVIDOR = process.env.VUE_APP_RUTA_API;
-
+import {mapActions,mapState} from 'vuex'
 export default {
   data() {
     return {
@@ -127,6 +130,11 @@ export default {
         (v) => v.length <= 10 || "*Maximo 10 caracteres",
       ],
     };
+  },
+  computed:{
+    ...mapState([
+      'usuarioState'
+    ])
   },
   methods: {
     crear() {
@@ -183,7 +191,12 @@ export default {
     actualizar() {
       this.value = false;
     },
+
+    ...mapActions([
+      'obtenerUsuarios'
+    ])
   },
-  created() {},
+  created() {
+  },
 };
 </script>
