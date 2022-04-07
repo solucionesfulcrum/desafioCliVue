@@ -28,82 +28,34 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <CardProducto :desserts="desserts" />
+    <CardProducto :desserts="producState" />
   </v-card>
 </template>
 
 <script>
 import CardProducto from "@/components/CardProducto.vue";
-
+import { mapActions, mapState } from "vuex";
 export default {
   name: "Home",
   data() {
     return {
-      desserts: [
-        {
-          id: 1,
-          name: "Frozen Yogurt",
-          descripcion: "Este producto es un producto lleno de vitaminas",
-          fat: 6.0,
-          carbs: 24,
-          precio: 4.0,
-          iron: "1%",
-        },
-        {
-          id: 2,
-          name: "Ice cream sandwich",
-          descripcion: "Este producto es de pura fruta",
-          fat: 9.0,
-          carbs: 37,
-          precio: 4.3,
-          iron: "1%",
-        },
-        {
-          id: 3,
-          name: "Eclair",
-          descripcion: "Este producto es una delicia",
-          fat: 16.0,
-          carbs: 23,
-          precio: 6.0,
-          iron: "7%",
-        },
-        {
-          id: 4,
-          name: "Ice cream sandwich",
-          descripcion: "Este producto es de pura fruta",
-          fat: 9.0,
-          carbs: 37,
-          precio: 4.3,
-          iron: "1%",
-        },
-        {
-          id: 5,
-          name: "Ice cream sandwich",
-          descripcion: "Este producto es de pura fruta",
-          fat: 9.0,
-          carbs: 37,
-          precio: 4.3,
-          iron: "1%",
-        },
-        {
-          id: 6,
-          name: "Ice cream sandwich",
-          descripcion: "Este producto es de pura fruta",
-          fat: 9.0,
-          carbs: 37,
-          precio: 4.3,
-          iron: "1%",
-        },
-      ],
       drawer: false,
       group: null,
     };
   },
-  methods: {
-    
+  methods: {},
+
+  computed: {
+    ...mapState(["producState"]),
   },
   components: {
     CardProducto,
+  },
+  methods: {
+    ...mapActions(["obtenerProduc"]),
+  },
+  created() {
+    this.obtenerProduc()
   },
 };
 </script>
