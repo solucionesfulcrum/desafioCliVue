@@ -2,14 +2,16 @@
 <div>
   <v-btn color="deep-purple" dark @click.stop="dialog = true">
     Ver Carrito<v-icon>mdi-cart-outline</v-icon>
+    [{{items.length}}]
   </v-btn>
   <v-row justify="center">
-    <v-dialog v-model="dialog" max-width="290">
+    <v-dialog v-model="dialog" max-width="350">
       <v-card>
         <v-card class="mx-auto" max-width="500">
           <v-toolbar color="deep-purple" dark>
             <v-toolbar-title>Carrito</v-toolbar-title>
-
+            <v-spacer></v-spacer>
+            <v-toolbar-title>Total a Pagar:[s./{{totalPagar}}]</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
 
@@ -107,9 +109,9 @@ export default {
   data() {
     return {
       dialog: false,
-
       selected: [2],
       items: [],
+      totalPagar: 0,
     };
   },
   props: ["desserts"],
@@ -118,7 +120,13 @@ export default {
     mostrar(id) {
       console.log("Selecionado", id);
       this.items.push(id);
-      console.log("data", this.items);
+      let suma = 0;
+      for(let i=0;i<this.items.length;i++){
+        console.log("data", this.items[i]);
+        suma += parseInt(this.items[i].precio, 10);
+      }
+      console.log("suma",suma)
+      this.totalPagar=suma
     },
   },
 };
